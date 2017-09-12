@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="toolbar" type="id"/>
+    <item name="meituan_ptr_layout" type="id"/>
+    <item name="list_view" type="id"/>
+    <item name="tag_view_holder" type="id"/>
+
+    <item name="tag_nine_grid_image_view" type="id"/>
+</resources>

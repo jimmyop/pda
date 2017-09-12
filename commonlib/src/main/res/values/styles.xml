@@ -1,0 +1,18 @@
+<resources>
+
+
+    <style name="CommunityListView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:drawSelectorOnTop">false</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fastScrollEnabled">false</item>
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:listSelector">@android:color/transparent</item>
+    </style>
+
+</resources>

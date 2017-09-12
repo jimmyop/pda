@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#148cd2</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorAccent">#148cd2</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="black_transparency">#80000000</color>
+
+    <!-- 大标题-->
+    <color name="text_main">#333333</color>
+    <!-- 副标题-->
+    <color name="text_secondary">#666666</color>
+    <!-- 小字色-->
+    <color name="text_third">#999999</color>
+    <!-- 输入框提示语-->
+    <color name="text_hint">#cccccc</color>
+    <!-- 蓝色字体-->
+    <color name="text_bule">#4cbafa</color>
+    <!-- 提示警告等文字-->
+    <color name="text_warning">#fe9b44</color>
+
+    <color name="text_cancle">#bbbbbb</color>
+    <!-- 隔线-->
+    <color name="divider">#E0E0E0</color>
+    <!-- 导航栏-->
+    <color name="title">#FBFBFB</color>
+
+    <color name="text_yellow">#F2D344</color>
+    <color name="text_light_bule">#5BC5DF</color>
+
+    <!-- 大背景-->
+    <color name="bg_main">#F3F3F3</color>
+    <!-- 小背景-->
+    <color name="bg_secondary">#EEF1F6</color>
+    <!-- 提示 警告等文字背景-->
+    <color name="bg_warning">#FEF6E1</color>
+    <!-- 主题背景-->
+    <color name="bg_blue">#4cbafa</color>
+
+
+    <!-- 按钮正常-->
+    <color name="btn_normal">#4cbafa</color>
+    <!-- 按钮点击-->
+    <color name="btn_press">#148cd2</color>
+    <!-- 按钮禁用-->
+    <color name="btn_disable">#dfdfdf</color>
+
+
+    <!-- 按钮正常-->
+    <color name="btn_red_normal">#fa6c87</color>
+    <!-- 按钮点击-->
+    <color name="btn_red_press">#e6506c</color>
+
+
+    <color name="course_time_bg">#EEF1F6</color>
+    <color name="course_week_bg">#DCF1FD</color>
+    <color name="course_week_bg_press">#9BDCFC</color>
+
+</resources>
