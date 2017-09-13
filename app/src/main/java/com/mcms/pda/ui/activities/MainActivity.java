@@ -2,6 +2,7 @@ package com.mcms.pda.ui.activities;
 
 import android.content.Context;
 import android.view.View;
+import android.webkit.WebView;
 
 import com.android.volley.Request;
 import com.mcms.commonlib.adapter.YJLArrayAdapter;
@@ -111,4 +112,5 @@ public class MainActivity extends BaseRequestListViewActivity {
         request.setMethod(Request.Method.GET);
         return request;
     }
+
 }
