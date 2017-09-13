@@ -38,6 +38,7 @@ public class MainActivity extends BaseRequestListViewActivity {
     public void firstLoaindData(String queueTag, LoadingUiType backGroundUI) {
 
         LogUtils.e("-----firstLoaindData------");
+        //dadasdad
 
         mMyAdapter.clear();
         List<String> list = new ArrayList<>();
