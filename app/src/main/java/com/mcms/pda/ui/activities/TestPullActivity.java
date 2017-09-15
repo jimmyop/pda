@@ -35,7 +35,7 @@ public class TestPullActivity extends BaseRequestActivity {
     @Override
     protected void initHeaderView(TitleHeadLayout headLayout) {
         super.initHeaderView(headLayout);
-        headLayout.setTitleText("BBBBBBBBB");
+        headLayout.setTitleText("BBBB");
 
     }
 
