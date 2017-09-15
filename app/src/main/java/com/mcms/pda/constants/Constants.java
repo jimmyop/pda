@@ -1,11 +1,7 @@
-package com.mcms.commonlib.constants;
+package com.mcms.pda.constants;
 
 public class Constants {
 
-    /**
-     * rootview id
-     **/
-    public static int id = 0x101011;
 
     /**
      * 记录当前软件的版本号 的文件，储存在 /sdcard/9apps/目录下 例如： version_code:1

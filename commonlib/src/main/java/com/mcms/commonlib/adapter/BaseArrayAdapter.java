@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.mcms.commonlib.R;
 
 import java.util.ArrayList;
@@ -28,10 +27,10 @@ import java.util.List;
  *
  * @param <T>
  */
-public class YJLArrayAdapter<T> extends BaseAdapter {
+public class BaseArrayAdapter<T> extends BaseAdapter {
 
     public interface AdapterItemBinder<T>{
-        void onBindItemData(View view, T data, int position, YJLArrayAdapter<T> adapter);
+        void onBindItemData(View view, T data, int position, BaseArrayAdapter<T> adapter);
     }
 
     private Context mContext;
@@ -44,19 +43,19 @@ public class YJLArrayAdapter<T> extends BaseAdapter {
 
     private boolean mNotifyOnChange = true;
 
-    public YJLArrayAdapter(Context context) {
+    public BaseArrayAdapter(Context context) {
         this(context, null);
     }
 
-    public YJLArrayAdapter(Context context, List<T> data){
+    public BaseArrayAdapter(Context context, List<T> data){
         this(context, data, 0);
     }
 
-    public YJLArrayAdapter(Context context, List<T> data, int resource) {
+    public BaseArrayAdapter(Context context, List<T> data, int resource) {
         this(context, data, resource, null, null);
     }
 
-    public YJLArrayAdapter(Context context, List<T> data, int resource, ListView listView, AbsListView.OnScrollListener l) {
+    public BaseArrayAdapter(Context context, List<T> data, int resource, ListView listView, AbsListView.OnScrollListener l) {
         mContext = context;
         mData = data == null ? new ArrayList<T>():data;
         mResource = resource;
@@ -333,8 +332,6 @@ public class YJLArrayAdapter<T> extends BaseAdapter {
 //        public void loadImage(int id, String uri, DisplayImageOptions options){
 //        	ImageView imageView = getView(id);
 //        	YjlImageLoader.getInstance().displayImage(uri, imageView, options);
-//
-//
 //        }
         
         public void setVisibility(int id, int visibility){

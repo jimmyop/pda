@@ -1,6 +1,7 @@
 package com.mcms.commonlib.fragments;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -10,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mcms.commonlib.R;
 import com.mcms.commonlib.utils.ToastUtils;
+import com.mcms.commonlib.widgets.TitleHeadLayout;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,11 +31,9 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment extends Fragment {
 
-    Toolbar mToolbar;
-    ViewGroup mContainerLayout;
-
+    private TitleHeadLayout mTitleHeadLayout;
+    private ViewGroup mContainerLayout;
     private Unbinder mUnbinder;
-
     protected Activity mActivity;
 
     @Override
@@ -46,17 +47,22 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return
      */
-    protected boolean hasToolbar() {
+    protected boolean hasTitleLayout() {
         return false;
+    }
+
+    /**
+     * 容器是否在标题栏下面
+     *
+     * @return true 默认是在下面
+     */
+    protected boolean underTitleLayout() {
+        return true;
     }
 
     @LayoutRes
     protected int getRootLayout() {
-        if (hasToolbar()) {
-            return R.layout.base_toolbar_container;
-        } else {
-            return R.layout.base_container;
-        }
+        return R.layout.base_toolbar_container;
     }
 
     @LayoutRes
@@ -67,10 +73,10 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(getRootLayout(), container, false);
 
+        mTitleHeadLayout = ButterKnife.findById(rootView, R.id.title_head_layout);
         mContainerLayout = ButterKnife.findById(rootView, R.id.container_layout);
-        mToolbar = ButterKnife.findById(rootView, R.id.toolbar);
-        int layoutId = getContentLayout();
-        View view = inflater.inflate(layoutId, mContainerLayout, false);
+
+        View view = inflater.inflate(getContentLayout(), mContainerLayout, false);
         mContainerLayout.addView(view);
 
         mUnbinder = ButterKnife.bind(this, rootView);
@@ -80,11 +86,44 @@ public abstract class BaseFragment extends Fragment {
             e.printStackTrace();
         }
 
-        return rootView;
-    }
+        // 判断有没有设置TitleLayout
+        if (hasTitleLayout()) {
+            //有TitleLayout ，初始化
+            initHeaderView(mTitleHeadLayout);
 
-    protected Toolbar getToolbar() {
-        return mToolbar;
+            //小于6.0系统，隐藏title 上面的 statusbar间隔
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                mTitleHeadLayout.showStatusBar(false);
+            }
+
+            // 判断容器是否在titleLayout下面
+            if (underTitleLayout()) {
+                //设置容器距离parent top 的高度
+                int height = mTitleHeadLayout.getTitleLayoutHeight();
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                lp.setMargins(0, height, 0, 0);
+                mContainerLayout.setLayoutParams(lp);
+            }
+
+        } else {
+            // 隐藏titleLayout
+            mTitleHeadLayout.showTitle(false);
+
+            //小于6.0系统，隐藏title 上面的 statusbar间隔
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                mTitleHeadLayout.showStatusBar(false);
+            }
+
+            if (underTitleLayout()) {
+
+                int height = mTitleHeadLayout.getTitleLayoutHeight();
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                lp.setMargins(0, height, 0, 0);
+                mContainerLayout.setLayoutParams(lp);
+            }
+        }
+
+        return rootView;
     }
 
     @Override
@@ -119,28 +158,13 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
-    public void setTitle(CharSequence title) {
-        if (mToolbar != null) {
-            mToolbar.setTitle(title);
-        } else {
-            Activity activity = getActivity();
-            if (activity != null) {
-                activity.setTitle(title);
-            }
-        }
 
-    }
-
-
-    public void setTitle(int titleId) {
-        if (mToolbar != null) {
-            mToolbar.setTitle(titleId);
-        } else {
-            Activity activity = getActivity();
-            if (activity != null) {
-                activity.setTitle(titleId);
-            }
-        }
+    /**
+     * 初始化Title布局
+     *
+     * @param headLayout
+     */
+    protected void initHeaderView(TitleHeadLayout headLayout) {
     }
 
     protected String getFragmentSimpleName() {

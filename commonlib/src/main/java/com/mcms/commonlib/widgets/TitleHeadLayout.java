@@ -2,7 +2,6 @@ package com.mcms.commonlib.widgets;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -14,6 +13,8 @@ import android.widget.TextView;
 
 import com.mcms.commonlib.R;
 import com.mcms.commonlib.utils.DisplayUtil;
+
+import butterknife.ButterKnife;
 
 
 /**
@@ -44,8 +45,8 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
     private TextView tvRightSecondary;
 
     private TextView tvMsgNumber;
-    private View statusBar;
 
+    private boolean statusInit = true;
 
     private Context mContext;
     OnTitleHeadItemClickListener mTitleClickListener;
@@ -87,15 +88,24 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
 
     public void init() {
         viewParent = LayoutInflater.from(mContext).inflate(R.layout.title_head_layout, this, true);
-        rootMain = (LinearLayout) viewParent.findViewById(R.id.root_main);
-        root = (RelativeLayout) viewParent.findViewById(R.id.root);
-        title = (TextView) viewParent.findViewById(R.id.tv_title);
 
-        tvLeft = (TextView) viewParent.findViewById(R.id.tv_left);
-        tvRight = (TextView) viewParent.findViewById(R.id.tv_right);
-        tvRightSecondary = (TextView) viewParent.findViewById(R.id.tv_right_secondary);
-        tvMsgNumber = (TextView) viewParent.findViewById(R.id.tv_msg_number);
-        statusBar = viewParent.findViewById(R.id.status_bar);
+        rootMain = ButterKnife.findById(viewParent, R.id.root_main);
+        root = ButterKnife.findById(viewParent, R.id.root);
+        title = ButterKnife.findById(viewParent, R.id.tv_title);
+        tvLeft = ButterKnife.findById(viewParent, R.id.tv_left);
+        tvRight = ButterKnife.findById(viewParent, R.id.tv_right);
+        tvRightSecondary = ButterKnife.findById(viewParent, R.id.tv_right_secondary);
+        tvMsgNumber = ButterKnife.findById(viewParent, R.id.tv_msg_number);
+
+        ButterKnife.bind(this, viewParent);
+//        rootMain = (LinearLayout) viewParent.findViewById(R.id.root_main);
+//        root = (RelativeLayout) viewParent.findViewById(R.id.root);
+//        title = (TextView) viewParent.findViewById(R.id.tv_title);
+//        tvLeft = (TextView) viewParent.findViewById(R.id.tv_left);
+//        tvRight = (TextView) viewParent.findViewById(R.id.tv_right);
+//        tvRightSecondary = (TextView) viewParent.findViewById(R.id.tv_right_secondary);
+//        tvMsgNumber = (TextView) viewParent.findViewById(R.id.tv_msg_number);
+//        statusBar = viewParent.findViewById(R.id.status_bar);
 
 
         try {
@@ -108,9 +118,9 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
             e.printStackTrace();
         }
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, statusBarHeight);
-        statusBar.setLayoutParams(lp);
-
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, statusBarHeight);
+//        statusBar.setLayoutParams(lp);
+        rootMain.setPadding(0, statusBarHeight, 0, 0);
         title.setOnClickListener(this);
         tvLeft.setOnClickListener(this);
         tvRight.setOnClickListener(this);
@@ -238,14 +248,6 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
         }
     }
 
-    public void showStatusBar(boolean flag) {
-        if (flag) {
-            statusBar.setVisibility(VISIBLE);
-        } else {
-            statusBar.setVisibility(GONE);
-        }
-    }
-
     /***
      * 获取右边按钮
      * */
@@ -367,6 +369,20 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
         }
     }
 
+    public void showStatusBar(boolean flag) {
+        if (flag) {
+            statusInit = flag;
+            rootMain.setPadding(0, statusBarHeight, 0, 0);
+
+//            statusBar.setVisibility(VISIBLE);
+        } else {
+            statusInit = flag;
+//            statusBar.setVisibility(GONE);
+            rootMain.setPadding(0, 0, 0, 0);
+        }
+    }
+
+
     /***
      * Specify an alpha value for the drawable. 0 means fully transparent, and 255 means fully opaque
      * @param alpha
@@ -403,19 +419,6 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
         }
     }
 
-    /**
-     * 统一的返回键处理
-     */
-    public void gotoBack() {
-        if (isReturnHome) {
-            Intent intent = new Intent();
-            intent.setClassName("com.mcms.pda", "com.mcms.pda.MainActivity");
-            mContext.startActivity(intent);
-        }
-        ((Activity) mContext).finish();
-    }
-
-
     public void setCenterTitleClickListerner(
             OnTitleHeadCenterItemClickListener mCenterTitleClickListerner) {
         this.mCenterTitleClickListerner = mCenterTitleClickListerner;
@@ -432,7 +435,7 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
     public int getTitleLayoutHeight() {
         int height = 0;
 
-        if (statusBar.getVisibility() == VISIBLE) {
+        if (statusInit) {
             height = height + statusBarHeight;
         }
 
@@ -441,6 +444,13 @@ public class TitleHeadLayout extends RelativeLayout implements View.OnClickListe
         }
 
         return height;
+    }
+
+    /**
+     * 统一的返回键处理
+     */
+    public void gotoBack() {
+        ((Activity) mContext).finish();
     }
 
 }

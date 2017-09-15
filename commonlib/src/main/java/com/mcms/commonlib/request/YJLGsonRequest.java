@@ -160,7 +160,6 @@ public class YJLGsonRequest<T> extends Request<T> {
         this.paramObject = requestParam;
         setTag(getRequestTag());
         this.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, 1.0f));
-        //this.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
 
@@ -383,107 +382,20 @@ public class YJLGsonRequest<T> extends Request<T> {
 
         BuildUrl mBuildUrl = new BuildUrl(getMethod(), methodUrl, paramObject);
 
+        String reqUrl = mBuildUrl.buileUrl();
+
+
+        LogUtils.d(reqUrl);
+
         if (getMethod() == Method.GET) {
-            setUrl(mBuildUrl.buileUrl());
+            setUrl(reqUrl);
         } else if (getMethod() == Method.POST) {
 
             String url = BaseApplication.APP_URL;
             setUrl(url);
-            mStrBody = mBuildUrl.buileUrl();
+            mStrBody = reqUrl;
         }
     }
-
-//    /***
-//     * 拼接请求链接地址和系统参数(ver,timestamp,session_key,sign，[accessToken:有了则加入无则忽略])
-//     *
-//     * @param mehtod          get or post
-//     * @param methodUrl
-//     * @param params          业务参数bean
-//     * @return get with the params,post just return url
-//     */
-//    public static String buildParamsUrl(int mehtod, String methodUrl, HashMap params) {
-//        StringBuffer paramBuffer = new StringBuffer();
-//        paramBuffer.append("method=");
-//        paramBuffer.append(methodUrl);
-//
-//        String queryJson = null;
-//
-//        Gson gson = new Gson();
-//        if (params != null) {
-//            queryJson = gson.toJson(params);
-//            LogUtils.d("params " + queryJson);
-//
-//            Iterator iter = params.entrySet().iterator();
-//            StringBuffer paramBuffer2 = new StringBuffer();
-//
-//            while (iter.hasNext()) {
-//                Map.Entry entry = (Map.Entry) iter.next();
-//                Object key = entry.getKey();
-//                Object value = entry.getValue();
-//                paramBuffer2.append("&" + key);
-//                paramBuffer2.append("=");
-//                paramBuffer2.append(value);
-//            }
-//
-//            queryJson = paramBuffer2.toString();
-//        }
-//
-//
-////        try {
-////            // 插入accessToken的值
-////            final String token = LoginTokenPrefs.get(BaseApplication.getApplicationInstance()).getToken();
-////            if (!TextUtils.isEmpty(token)) {
-////                JSONObject queryJsonObject = null;
-////                if (params != null) {
-////                    queryJsonObject = new JSONObject(queryJson);
-////                } else {
-////                    queryJsonObject = new JSONObject();
-////                }
-////                if (!queryJsonObject.has("accessToken")) {
-////                    queryJsonObject.put("accessToken", token);
-////
-////                }
-////
-////                queryJson = queryJsonObject.toString();
-////            }
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////        }
-//
-//        String signUrl = paramBuffer.toString();
-//
-////        if (!TextUtils.isEmpty(queryJson)) {
-////            // 签名的数据是原始数据，不能对参数进行UrlEncode之后再签名；POST参数以同样的方式参与签名。
-////            try {
-////                queryJson = URLEncoder.encode(queryJson, "UTF-8");
-////            } catch (Exception e) {
-////                e.printStackTrace();
-////            }
-////            signUrl = signUrl + "&params=" + queryJson;
-////        }
-//        if (!TextUtils.isEmpty(queryJson)) {
-////            paramBuffer.append("&params=");
-//            paramBuffer.append(queryJson);
-//        }
-//
-//        //TODO 签名
-////        String secretKey = "";//秘钥
-////        AppSignatureMd5 signUtil = new AppSignatureMd5(secretKey, signUrl);
-////        String md5Sign = signUtil.sign();
-////        paramBuffer.append("&sign=");
-////        paramBuffer.append(md5Sign);
-//
-//        String encodeUrl = paramBuffer.toString();
-//
-//        String url = BaseApplication.APP_URL;
-//        url = url + "?";
-//        if (mehtod == Method.GET) {
-//            encodeUrl = url + paramBuffer.toString();
-//        }
-//
-//        return encodeUrl;
-//    }
-
 
     public String getParserKey() {
         return parserKey;

@@ -1,8 +1,6 @@
 package com.mcms.commonlib.avtivities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +32,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public abstract class BaseRequestActivity extends BaseActivity implements
         YJLGsonRequest.ResponseCallbackListener, InvocationHandler {
 
-    public final static int RELOGING_SUCCESS_REQ_CODE = 789;
-
     /**
      * 默认请求组的标识
      */
@@ -45,10 +41,6 @@ public abstract class BaseRequestActivity extends BaseActivity implements
      */
     private ConcurrentLinkedQueue<RequestUiManager> requestUiManagerList;
 
-    /***
-     * 存放请求的对象 key -- request getTag LinkedHashMap 保证了插入和取出的顺序是一致的
-     */
-    private Map<Object, YJLGsonRequest> requestsMap;
     /***
      * 当前在运行中的请求组 标识
      */
@@ -61,58 +53,10 @@ public abstract class BaseRequestActivity extends BaseActivity implements
     }
 
     private void initRequestManager() {
+
+        RequestUiManager defaultRequestUiManager = requestUiManagerFactory(DEFAULT_REQUEST_TAG, LoadingUiType.BACKGROUND);
         requestUiManagerList = new ConcurrentLinkedQueue<>();
-        RequestUiManager defaultRequestUiManager = requestUiManagerFactory(
-                DEFAULT_REQUEST_TAG, LoadingUiType.BACKGROUND);
-        requestsMap = defaultRequestUiManager.getRequestsMap();
         requestUiManagerList.add(defaultRequestUiManager);
-    }
-
-    /***
-     * 开始启动第一条请求,成功后会继续执行队列的请求，直到结束或者是请求失败
-     * 子类onResponseSuccess()方法中新增请求到队列后，不能重新startRequests()，队列会自动执行
-     */
-    protected void startDefaultQueueRequests(boolean isDisplayLoding) {
-        startQueueRequests(isDisplayLoding, DEFAULT_REQUEST_TAG);
-    }
-
-    protected void startQueueRequests(boolean isDisplayLoding, String tag) {
-        for (RequestUiManager requestUiManager : requestUiManagerList) {
-            if (tag.equals(requestUiManager.getQueueTag())) {
-
-                Set<Map.Entry<Object, YJLGsonRequest>> entrySet = requestUiManager
-                        .getRequestsMap().entrySet();
-                Iterator iter = entrySet.iterator();
-                if (iter.hasNext()) {
-                    requestUiManager.setDisplayBeginLoding(isDisplayLoding);
-                    requestUiManager.showBeginLoaingView(getContentContainer(),
-                            getParms());
-                    Map.Entry entry = (Map.Entry) iter.next();
-                    YJLGsonRequest request = (YJLGsonRequest) entry.getValue();
-                    request.sendRequest();
-                }
-                // break;
-            }
-        }
-    }
-
-    /***
-     *  获得除了account.authority.getkey外的第一条请求
-     * @param requestUiManager
-     * @return
-     */
-    public YJLGsonRequest getNextRequestEceptKeyReq(RequestUiManager requestUiManager) {
-        Set<Map.Entry<Object, YJLGsonRequest>> entrySet = requestUiManager.getRequestsMap().entrySet();
-        Iterator iter = entrySet.iterator();
-        while (iter.hasNext()) {
-            Map.Entry entry = (Map.Entry) iter.next();
-            YJLGsonRequest request = (YJLGsonRequest) entry.getValue();
-            if (request.getTag().toString().contains("account.authority.getkey")) {
-                continue;
-            }
-            return request;
-        }
-        return null;
     }
 
     protected ViewGroup.LayoutParams getParms() {
@@ -128,8 +72,7 @@ public abstract class BaseRequestActivity extends BaseActivity implements
      *            UI加载的类型
      * @return RequestUiManager
      */
-    private RequestUiManager requestUiManagerFactory(String queueTag,
-                                                     LoadingUiType type) {
+    private RequestUiManager requestUiManagerFactory(String queueTag, LoadingUiType type) {
         RequestUiManager requestUiManager = null;
         requestUiManager = new RequestUiManager(loadingManagerFactory(type));
         requestUiManager.setQueueTag(queueTag);
@@ -182,15 +125,13 @@ public abstract class BaseRequestActivity extends BaseActivity implements
                 manager.clearData();
             }
         }
-
     }
 
     /***
      * 请求数据成功，code = 0 时的回调
      */
     @Override
-    public void onResponseSuccess(Object response, boolean cache, Object tag,
-                                  Object owerQueueTag) {
+    public void onResponseSuccess(Object response, boolean cache, Object tag, Object owerQueueTag) {
 
     }
 
@@ -198,8 +139,7 @@ public abstract class BaseRequestActivity extends BaseActivity implements
      * 请求数据成功，code ！= 0 时的回调 （默认情况下loadingManager ！= null）提示的UI已处理，子类不需要重复显示处理了
      */
     @Override
-    public void onResponseCodeFailure(int code, String msg_cn, String msg_en,
-                                      Object tag, Object owerQueueTag) {
+    public void onResponseCodeFailure(int code, String msg_cn, String msg_en, Object tag, Object owerQueueTag) {
 
     }
 
@@ -207,8 +147,7 @@ public abstract class BaseRequestActivity extends BaseActivity implements
      * 请求数据失败的回调 （默认情况下loadingManager ！= null）提示的UI已处理，子类不需要重复显示处理了
      */
     @Override
-    public void onResponseFailure(VolleyError error, Object tag,
-                                  Object owerQueueTag) {
+    public void onResponseFailure(VolleyError error, Object tag, Object owerQueueTag) {
 
     }
 
@@ -243,6 +182,7 @@ public abstract class BaseRequestActivity extends BaseActivity implements
 
         String url = request.getUrl();
         YJLGsonRequest.ResponseCallbackListener responseCallbackListener = requestUiManager.getCallbackListenersMap().get(requestTag);
+
         if ("onResponseSuccess".equals(method.getName())) {
             // 请求数据成功，且code = 0
             requestUiManager.removeRequestAndCallbackListener(requestTag);
@@ -259,7 +199,7 @@ public abstract class BaseRequestActivity extends BaseActivity implements
             }
 
             int code = (Integer) args[0];
-            boolean needLogin = false;
+
             if (1000 == code || 1104 == code) {
 
             } else if (1103 == code) { // session_key 会话失效了。
@@ -275,12 +215,6 @@ public abstract class BaseRequestActivity extends BaseActivity implements
             // 显示UI
             if (requestUiManager != null) {
                 removeRequest = requestUiManager.needRemoveRequest();
-                /*
-                 * if ( !needLogin) {
-				 * requestUiManager.showResponseErrorView(mRootViewRelative
-				 * ,obj.toString(),getParms()); } else {
-				 * requestUiManager.showSuccessView(mRootViewRelative); }
-				 */
                 requestUiManager.showResponseErrorView(getContentContainer(), code,
                         obj.toString(), getParms());
             }
@@ -337,10 +271,8 @@ public abstract class BaseRequestActivity extends BaseActivity implements
             boolean nextRequests = startQueueNextRequests(requestUiManager);
             if (!nextRequests) {
                 // 所有请求已发送完毕
-                LogUtils.d(requestUiManager.getQueueTag()
-                        + " all request sended success");
+                LogUtils.d(requestUiManager.getQueueTag() + " all request sended success");
                 requestUiManager.showSuccessView(getContentContainer());
-
             }
         }
     }
@@ -364,37 +296,6 @@ public abstract class BaseRequestActivity extends BaseActivity implements
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RELOGING_SUCCESS_REQ_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                LogUtils.d("relogin success");
-            } else {
-                LogUtils.d("no relogin ");
-            }
-        }
-    }
-
-    /**
-     * 显示内容布局
-     */
-    protected void showContentLayout() {
-        RequestUiManager requestUiManager = getRequestUiManager(DEFAULT_REQUEST_TAG);
-        requestUiManager.showSuccessView(getContentContainer());
-    }
-
-    /**
-     * 显示内容布局
-     */
-    protected void showEmptyLayout() {
-        showEmptyLayout("没有搜索到任何记录");
-    }
-
-    protected void showEmptyLayout(String msg) {
-        RequestUiManager requestUiManager = getRequestUiManager(DEFAULT_REQUEST_TAG);
-        requestUiManager.showEmptyDataView(getContentContainer(), msg, getParms());
-    }
 
     /***
      * 把请求加到默认的请求队列中
@@ -472,7 +373,32 @@ public abstract class BaseRequestActivity extends BaseActivity implements
             addYJLGsonRequest2QueueByTag(request, runningQueueTag,
                     LoadingUiType.SILENCE);
         }
+    }
 
+
+    /***
+     * 开始启动第一条请求,成功后会继续执行队列的请求，直到结束或者是请求失败
+     * 子类onResponseSuccess()方法中新增请求到队列后，不能重新startRequests()，队列会自动执行
+     */
+    protected void startDefaultQueueRequests(boolean isDisplayLoding) {
+        startQueueRequests(isDisplayLoding, DEFAULT_REQUEST_TAG);
+    }
+
+    protected void startQueueRequests(boolean isDisplayLoding, String tag) {
+        for (RequestUiManager requestUiManager : requestUiManagerList) {
+            if (tag.equals(requestUiManager.getQueueTag())) {
+
+                Set<Map.Entry<Object, YJLGsonRequest>> entrySet = requestUiManager.getRequestsMap().entrySet();
+                Iterator iter = entrySet.iterator();
+                if (iter.hasNext()) {
+                    requestUiManager.setDisplayBeginLoding(isDisplayLoding);
+                    requestUiManager.showBeginLoaingView(getContentContainer(), getParms());
+                    Map.Entry entry = (Map.Entry) iter.next();
+                    YJLGsonRequest request = (YJLGsonRequest) entry.getValue();
+                    request.sendRequest();
+                }
+            }
+        }
     }
 
     /***
@@ -528,7 +454,7 @@ public abstract class BaseRequestActivity extends BaseActivity implements
                 return requestUiManager.getRequestsMap();
             }
         }
-        return new HashMap<Object, YJLGsonRequest>();
+        return new HashMap<>();
     }
 
     /***
@@ -537,5 +463,25 @@ public abstract class BaseRequestActivity extends BaseActivity implements
      */
     protected String getSpecialEmpetyData(Object response) {
         return null;
+    }
+
+    /**
+     * 显示内容布局
+     */
+    protected void showContentLayout() {
+        RequestUiManager requestUiManager = getRequestUiManager(DEFAULT_REQUEST_TAG);
+        requestUiManager.showSuccessView(getContentContainer());
+    }
+
+    /**
+     * 显示内容布局
+     */
+    protected void showEmptyLayout() {
+        showEmptyLayout("没有搜索到任何记录");
+    }
+
+    protected void showEmptyLayout(String msg) {
+        RequestUiManager requestUiManager = getRequestUiManager(DEFAULT_REQUEST_TAG);
+        requestUiManager.showEmptyDataView(getContentContainer(), msg, getParms());
     }
 }

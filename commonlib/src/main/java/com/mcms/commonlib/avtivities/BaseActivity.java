@@ -45,8 +45,6 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private RelativeLayout rootLayout;
-
     private TitleHeadLayout mTitleHeadLayout;
     private ViewGroup mContainerLayout;
     private InputMethodManager mInputMethodManager;
@@ -128,9 +126,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             QMUIStatusBarHelper.setStatusBarDarkMode(this);
         }
 
-
-        rootLayout = ButterKnife.findById(this, R.id.root_layout);
-
         mTitleHeadLayout = ButterKnife.findById(this, R.id.title_head_layout);
         mContainerLayout = ButterKnife.findById(this, R.id.container_layout);
 
@@ -151,6 +146,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             //小于6.0系统，隐藏title 上面的 statusbar间隔
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 mTitleHeadLayout.showStatusBar(false);
+            }else{
+
             }
 
             // 判断容器是否在titleLayout下面

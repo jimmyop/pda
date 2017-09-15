@@ -1,4 +1,4 @@
-package com.mcms.commonlib.constants;
+package com.mcms.pda.constants;
 
 /**
  * 请求方法名

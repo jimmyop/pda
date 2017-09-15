@@ -56,28 +56,6 @@ public class BuildUrl {
             queryJson = paramBuffer2.toString();
         }
 
-
-//        try {
-//            // 插入accessToken的值
-//            final String token = LoginTokenPrefs.get(BaseApplication.getApplicationInstance()).getToken();
-//            if (!TextUtils.isEmpty(token)) {
-//                JSONObject queryJsonObject = null;
-//                if (params != null) {
-//                    queryJsonObject = new JSONObject(queryJson);
-//                } else {
-//                    queryJsonObject = new JSONObject();
-//                }
-//                if (!queryJsonObject.has("accessToken")) {
-//                    queryJsonObject.put("accessToken", token);
-//
-//                }
-//
-//                queryJson = queryJsonObject.toString();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         String signUrl = paramBuffer.toString();
 
 //        if (!TextUtils.isEmpty(queryJson)) {
