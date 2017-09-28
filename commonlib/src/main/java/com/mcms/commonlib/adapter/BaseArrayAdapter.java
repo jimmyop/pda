@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mcms.commonlib.R;
+import com.mcms.commonlib.utils.ImageLoaderUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,14 +24,12 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * 
- * @author zengxiangbin
- *
  * @param <T>
+ * @author zengxiangbin
  */
 public class BaseArrayAdapter<T> extends BaseAdapter {
 
-    public interface AdapterItemBinder<T>{
+    public interface AdapterItemBinder<T> {
         void onBindItemData(View view, T data, int position, BaseArrayAdapter<T> adapter);
     }
 
@@ -47,28 +47,55 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
         this(context, null);
     }
 
-    public BaseArrayAdapter(Context context, List<T> data){
+    public BaseArrayAdapter(Context context, List<T> data) {
         this(context, data, 0);
     }
 
     public BaseArrayAdapter(Context context, List<T> data, int resource) {
-        this(context, data, resource, null, null);
+        this(context, data, resource, null);
     }
 
-    public BaseArrayAdapter(Context context, List<T> data, int resource, ListView listView, AbsListView.OnScrollListener l) {
+    public BaseArrayAdapter(Context context, List<T> data, int resource, ListView listView) {
         mContext = context;
-        mData = data == null ? new ArrayList<T>():data;
+        mData = data == null ? new ArrayList<T>() : data;
         mResource = resource;
         mInflater = LayoutInflater.from(context);
-        if (listView != null && l != null){
-//            listView.setOnScrollListener(
-//                    new PauseOnScrollListener(YjlImageLoader.getInstance(), true, true, l)
-//            );
+        if (listView != null) {
+            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                             @Override
+                                             public void onScrollStateChanged(AbsListView absListView, int i) {
+                                                 switch (i) {
+                                                     case SCROLL_STATE_IDLE:
+                                                         //滑动停止
+                                                         try {
+                                                             if (getContext() != null) Glide.with(getContext()).resumeRequests();
+                                                         } catch (Exception e) {
+                                                             e.printStackTrace();
+                                                         }
+                                                         break;
+                                                     case SCROLL_STATE_FLING:
+                                                         //正在滚动
+                                                         try {
+                                                             if (getContext() != null) Glide.with(getContext()).pauseRequests();
+                                                         } catch (Exception e) {
+                                                             e.printStackTrace();
+                                                         }
+                                                         break;
+
+                                                 }
+                                             }
+
+                                             @Override
+                                             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+                                             }
+                                         }
+            );
         }
     }
 
-    public void change(@NonNull List<T> data){
-        if (data == null){
+    public void change(@NonNull List<T> data) {
+        if (data == null) {
             data = new ArrayList<T>();
         }
         mData = new ArrayList<T>(data);
@@ -77,15 +104,15 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
         }
     }
 
-    public void replaceAll(@NonNull List<T> data){
-    	if(data == null){
-    		data = new ArrayList<T>();
-    	}
-    	mData = new ArrayList<T>(data);
+    public void replaceAll(@NonNull List<T> data) {
+        if (data == null) {
+            data = new ArrayList<T>();
+        }
+        mData = new ArrayList<T>(data);
         if (mNotifyOnChange) {
             notifyDataSetChanged();
         }
-       
+
     }
 
     @Override
@@ -96,7 +123,7 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
     @Override
     public T getItem(int position) {
         int size = mData.size();
-        if (0 <= position && position < size){
+        if (0 <= position && position < size) {
             return mData.get(position);
         }
         return null;
@@ -107,22 +134,22 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
         return position;
     }
 
-    public List<T> getData(){
+    public List<T> getData() {
         return new ArrayList<T>(mData);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null){
+        if (convertView == null) {
             convertView = newView(mInflater, position, parent);
-            convertView.setTag(R.id.tag_view_holder, new ViewHolder(parent, convertView).setPosition(position));
+            convertView.setTag(R.id.tag_view_holder, new ViewHolder(parent, convertView, mContext).setPosition(position));
         }
-        if (convertView instanceof AdapterItemBinder){
+        if (convertView instanceof AdapterItemBinder) {
             AdapterItemBinder<T> itemBinder = (AdapterItemBinder<T>) convertView;
             itemBinder.onBindItemData(convertView, getItem(position), position, this);
             afterAutoBindData(convertView, position);
-        }else {
-            ViewHolder holder = (ViewHolder)convertView.getTag(R.id.tag_view_holder);
+        } else {
+            ViewHolder holder = (ViewHolder) convertView.getTag(R.id.tag_view_holder);
             if (holder != null) {
                 holder.setPosition(position);
             }
@@ -130,20 +157,21 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
         }
         return convertView;
     }
-    
-    protected void afterAutoBindData(View convertView, int position){
-    	
+
+    protected void afterAutoBindData(View convertView, int position) {
+
     }
 
     /**
      * new a item view
+     *
      * @param inflater LayoutInflater
      * @param position current position
-     * @param parent parent layout
+     * @param parent   parent layout
      * @return item view
      */
-    protected View newView(LayoutInflater inflater, int position, ViewGroup parent){
-        if (mResource > 0){
+    protected View newView(LayoutInflater inflater, int position, ViewGroup parent) {
+        if (mResource > 0) {
             return inflater.inflate(mResource, parent, false);
         }
         throw new IllegalArgumentException("cannot new item view");
@@ -151,12 +179,13 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
 
     /**
      * bing view with data
-     * @param view item view
-     * @param data item data
+     *
+     * @param view   item view
+     * @param data   item data
      * @param holder item child view holder
      */
     public void bindItemData(View view, T data, ViewHolder holder) {
-        if (view instanceof TextView){
+        if (view instanceof TextView) {
             TextView textView = (TextView) view;
             textView.setText(data.toString());
         }
@@ -191,7 +220,7 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
      *
      * @param items The items to add at the end of the array.
      */
-    public void addAll(@NonNull T ... items) {
+    public void addAll(@NonNull T... items) {
         synchronized (mLock) {
             Collections.addAll(mData, items);
         }
@@ -202,7 +231,7 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
      * Inserts the specified object at the specified index in the array.
      *
      * @param object The object to insert into the array.
-     * @param index The index at which the object must be inserted.
+     * @param index  The index at which the object must be inserted.
      */
     public void insert(@NonNull T object, int index) {
         synchronized (mLock) {
@@ -222,12 +251,12 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
-    
-    public void remove(int position){
-    	synchronized (mLock) {
+
+    public void remove(int position) {
+        synchronized (mLock) {
             mData.remove(position);
         }
-    	if (mNotifyOnChange) notifyDataSetChanged();
+        if (mNotifyOnChange) notifyDataSetChanged();
     }
 
     /**
@@ -235,7 +264,7 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
      */
     public void clear() {
         synchronized (mLock) {
-           mData.clear();
+            mData.clear();
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -244,11 +273,11 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
      * Sorts the content of this adapter using the specified comparator.
      *
      * @param comparator The comparator used to sort the objects contained
-     *        in this adapter.
+     *                   in this adapter.
      */
     public void sort(@NonNull Comparator<? super T> comparator) {
         synchronized (mLock) {
-           Collections.sort(mData, comparator);
+            Collections.sort(mData, comparator);
         }
         if (mNotifyOnChange) notifyDataSetChanged();
     }
@@ -268,7 +297,7 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
      * {@link #notifyDataSetChanged}.  If set to false, caller must
      * manually call notifyDataSetChanged() to have the changes
      * reflected in the attached view.
-     *
+     * <p>
      * The default is true, and calling notifyDataSetChanged()
      * resets the flag to true.
      *
@@ -285,10 +314,12 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
         public final ViewGroup parent;
         public final View itemView;
         private int position;
+        private Context context;
 
-        public ViewHolder(@NonNull ViewGroup parent, @NonNull View convertView) {
+        public ViewHolder(@NonNull ViewGroup parent, @NonNull View convertView, Context context) {
             this.parent = parent;
             this.itemView = convertView;
+            this.context = context;
         }
 
         @SuppressWarnings("unchecked")
@@ -309,39 +340,40 @@ public class BaseArrayAdapter<T> extends BaseAdapter {
             this.position = position;
             return this;
         }
-        
-        public void setText(int id, CharSequence text){
-        	TextView textView = getView(id);
-        	textView.setText(text);
-        }
-        
-        public void setBackgroundResource(int id, int resid){
-        	View view = getView(id);
-        	view.setBackgroundResource(resid);
+
+        public void setText(int id, CharSequence text) {
+            TextView textView = getView(id);
+            textView.setText(text);
         }
 
-        public void setImageResource(int id, int resid){
+        public void setBackgroundResource(int id, int resid) {
+            View view = getView(id);
+            view.setBackgroundResource(resid);
+        }
+
+        public void setImageResource(int id, int resid) {
             ImageView imageView = getView(id);
             imageView.setImageResource(resid);
         }
-        
-        public void setOnClickListener(int id, OnClickListener l){
-        	getView(id).setOnClickListener(l);
+
+        public void setOnClickListener(int id, OnClickListener l) {
+            getView(id).setOnClickListener(l);
         }
-        
-//        public void loadImage(int id, String uri, DisplayImageOptions options){
-//        	ImageView imageView = getView(id);
-//        	YjlImageLoader.getInstance().displayImage(uri, imageView, options);
-//        }
-        
-        public void setVisibility(int id, int visibility){
-        	View view = getView(id);
-        	view.setVisibility(visibility);
+
+        public void loadImage(int id, String uri) {
+            ImageView imageView = getView(id);
+
+            ImageLoaderUtil.getInstance().loadImage(context, imageView, uri);
         }
-        
-        public void setVisibility(int id, boolean isVisibility){
-        	View view = getView(id);
-        	view.setVisibility(isVisibility?View.VISIBLE:View.GONE);
+
+        public void setVisibility(int id, int visibility) {
+            View view = getView(id);
+            view.setVisibility(visibility);
+        }
+
+        public void setVisibility(int id, boolean isVisibility) {
+            View view = getView(id);
+            view.setVisibility(isVisibility ? View.VISIBLE : View.GONE);
         }
     }
 

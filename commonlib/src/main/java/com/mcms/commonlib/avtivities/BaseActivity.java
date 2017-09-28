@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.mcms.commonlib.R;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+
+import static android.R.attr.fragment;
 
 
 /**
@@ -179,6 +182,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         initViewEvents();
         initData(savedInstanceState);
+
     }
 
     /**

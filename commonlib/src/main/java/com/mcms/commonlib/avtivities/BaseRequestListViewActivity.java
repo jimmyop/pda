@@ -3,6 +3,7 @@ package com.mcms.commonlib.avtivities;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -73,7 +74,7 @@ public abstract class BaseRequestListViewActivity extends BaseRequestActivity im
     @CallSuper
     @Override
     protected void initData(Bundle savedInstanceState) {
-        firstLoaindData(DEFAULT_REQUEST_TAG, LoadingUiType.BACKGROUND);
+        firstLoadingData(DEFAULT_REQUEST_TAG, LoadingUiType.BACKGROUND);
     }
 
     @Override
@@ -111,8 +112,7 @@ public abstract class BaseRequestListViewActivity extends BaseRequestActivity im
      * 上拉加载更多数据
      */
     private void loadMore() {
-//        mFooterView.setStatus(FooterView.LOADING);
-//        mFooterView.setLayoutParams(pl_show);
+
         getNextPageData(getQueueStringTag(), LoadingUiType.PULLUPDOWN);
 
     }
@@ -186,21 +186,12 @@ public abstract class BaseRequestListViewActivity extends BaseRequestActivity im
             }
         }
         if (String.valueOf(ownerQueuetag).equals(getQueueStringTag())) { // 是listview请求用到的组
-//            mFooterView.setStatus(FooterView.HIDE);
-//            mFooterView.setLayoutParams(pl_hide);
+
             LogUtils.e(getQueueStringTag() + " map size " + getRequestMap(getQueueStringTag()).size());
             if (getRequestMap(getQueueStringTag()).size() == 0 && mPtrLayout != null) {
                 mPtrLayout.finishRefresh();
             }
         }
-    }
-
-    /**
-     * 隐藏加载更多
-     */
-    protected void hideFooterView() {
-//        mFooterView.setStatus(FooterView.HIDE);
-//        mFooterView.setLayoutParams(pl_hide);
     }
 
     /***
@@ -216,7 +207,6 @@ public abstract class BaseRequestListViewActivity extends BaseRequestActivity im
                 mFooterView.setStatus(FooterView.HIDE);
                 mListView.removeFooterView(mFooterView);
             }
-
 
             if (mPtrLayout != null) {
                 mPtrLayout.finishRefresh();
@@ -260,7 +250,7 @@ public abstract class BaseRequestListViewActivity extends BaseRequestActivity im
      *
      *
      */
-    public abstract void firstLoaindData(String queueTag, LoadingUiType backGroundUI);
+    public abstract void firstLoadingData(String queueTag, LoadingUiType backGroundUI);
 
     /***
      *  listiew 下拉刷新数据

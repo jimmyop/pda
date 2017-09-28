@@ -16,6 +16,7 @@ import com.mcms.pda.constants.ConstantsUrl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends BaseRequestListViewActivity {
 
@@ -37,14 +38,15 @@ public class MainActivity extends BaseRequestListViewActivity {
     @Override
     protected void initViewEvents() {
         super.initViewEvents();
+
+
         mMyAdapter = new MyAdapter(this);
         getListView().setAdapter(mMyAdapter);
     }
 
     @Override
-    public void firstLoaindData(String queueTag, LoadingUiType backGroundUI) {
+    public void firstLoadingData(String queueTag, LoadingUiType backGroundUI) {
 
-        LogUtils.e("-----firstLoaindData------");
         //dadasdad
 
         mMyAdapter.clear();
@@ -66,7 +68,6 @@ public class MainActivity extends BaseRequestListViewActivity {
             list.add("item：" + i);
         }
         mMyAdapter.addAll(list);
-        LogUtils.e("-----onRefreshData------");
 
 
         getPtrLayout().postDelayed(new Runnable() {
@@ -79,7 +80,7 @@ public class MainActivity extends BaseRequestListViewActivity {
 
     @Override
     public void getNextPageData(String queueTag, LoadingUiType pullUpDownUI) {
-        LogUtils.e("-----getNextPageData------");
+
     }
 
     @Override
@@ -102,6 +103,18 @@ public class MainActivity extends BaseRequestListViewActivity {
         public void bindItemData(View view, String data, ViewHolder holder) {
             super.bindItemData(view, data, holder);
             holder.setText(R.id.tv, data);
+
+            List<String> list = new ArrayList<>();
+            list.add("http://img.poco.cn/mypoco/myphoto/20071129/21/3898355120071129211344578_007_640.jpg");
+            list.add("http://newspaper.jnu.edu.cn/digidata/2014-9-15/4804415913.JPG");
+            list.add("http://img.clewm.net/richTextCover/2014/01/22/52dfa783110d0.jpg");
+            list.add("http://imgsrc.baidu.com/imgad/pic/item/96dda144ad3459825e16a88606f431adcbef8402.jpg");
+            list.add("http://heilongjiang.sinaimg.cn/2015/1026/U10115P1274DT20151026105445.jpg");
+
+
+            int a = holder.getPosition() % 5;
+
+            holder.loadImage(R.id.iv, list.get(a));
         }
     }
 
