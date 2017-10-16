@@ -128,16 +128,16 @@ public abstract class BaseRequestRecyclerViewActivity extends BaseRequestActivit
 
         if (isLoadOver) {
 
-//            if (mRecyclerView.getFooterViewsCount() > 0) {
-//                mFooterView.setStatus(FooterView.HIDE);
-//                mRecyclerView.removeFooterView(mFooterView);
-//            }
+            if (mRecyclerView.getFooterViewsCount() > 0) {
+                mFooterView.setStatus(FooterView.HIDE);
+                mRecyclerView.removeFooterView(mFooterView);
+            }
 
         } else {
-//            if (mRecyclerView.getFooterViewsCount() == 0) {
-//                mRecyclerView.addFooterView(mFooterView);
-//
-//            }
+            if (mRecyclerView.getFooterViewsCount() == 0) {
+                mRecyclerView.addFooterView(mFooterView);
+
+            }
         }
     }
 
@@ -203,10 +203,10 @@ public abstract class BaseRequestRecyclerViewActivity extends BaseRequestActivit
         super.onResponseCodeFailure(code, msg_cn, msg_en, tag, ownerQueuetag);
         if (String.valueOf(ownerQueuetag).equals(getQueueStringTag())) { // 是listview请求用到的组失败了
 
-//            if (mRecyclerView.getFooterViewsCount() > 0) {
-//                mFooterView.setStatus(FooterView.HIDE);
-//                mRecyclerView.removeFooterView(mFooterView);
-//            }
+            if (mRecyclerView.getFooterViewsCount() > 0) {
+                mFooterView.setStatus(FooterView.HIDE);
+                mRecyclerView.removeFooterView(mFooterView);
+            }
 
             if (mPtrLayout != null) {
                 mPtrLayout.finishRefresh();
@@ -222,10 +222,10 @@ public abstract class BaseRequestRecyclerViewActivity extends BaseRequestActivit
         super.onResponseFailure(error, tag, ownerQueuetag);
         if (String.valueOf(ownerQueuetag).equals(getQueueStringTag())) { // 是listview请求用到的组失败了
 
-//            if (mRecyclerView.getFooterViewsCount() > 0) {
-//                mFooterView.setStatus(FooterView.HIDE);
-//                mRecyclerView.removeFooterView(mFooterView);
-//            }
+            if (mRecyclerView.getFooterViewsCount() > 0) {
+                mFooterView.setStatus(FooterView.HIDE);
+                mRecyclerView.removeFooterView(mFooterView);
+            }
 
             if (mPtrLayout != null) {
                 mPtrLayout.finishRefresh();
@@ -282,7 +282,7 @@ public abstract class BaseRequestRecyclerViewActivity extends BaseRequestActivit
      * @return
      */
     public String getQueueStringTag() {
-        return "listview";
+        return "recyclerview";
     }
 
     /***

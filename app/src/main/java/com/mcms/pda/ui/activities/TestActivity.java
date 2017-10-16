@@ -1,5 +1,7 @@
 package com.mcms.pda.ui.activities;
 
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,15 +39,15 @@ public class TestActivity extends BaseRequestRecyclerViewActivity {
     @Override
     public void firstLoadingData(String queueTag, LoadingUiType backGroundUI) {
 
-//        getRecyclerView().addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-//        getRecyclerView().setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        getRecyclerView().addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        getRecyclerView().setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
 //        getRecyclerView().addItemDecoration(new DividerGridItemDecoration(this));
 //        getRecyclerView().setLayoutManager(new GridLayoutManager(this, 3));
 
         // 错列网格布局
-        getRecyclerView().setLayoutManager(new StaggeredGridLayoutManager(3,
-                StaggeredGridLayoutManager.VERTICAL));
+//        getRecyclerView().setLayoutManager(new StaggeredGridLayoutManager(3,
+//                StaggeredGridLayoutManager.VERTICAL));
 
         List<Item> Datas = new ArrayList<>();
         for (int i = 1; i <= 30; i++) {
@@ -58,10 +60,12 @@ public class TestActivity extends BaseRequestRecyclerViewActivity {
         mMutipleAdaper = new MyAdapter(this, Datas);
         getRecyclerView().setAdapter(mMutipleAdaper);
 
-        View headerView = LayoutInflater.from(this).inflate(R.layout.layout_header, getRecyclerView(), false);
-        View footerView = LayoutInflater.from(this).inflate(R.layout.layout_footer, getRecyclerView(), false);
-        getRecyclerView().addHeaderView(headerView);
-        getRecyclerView().addFooterView(footerView);
+//        View headerView = LayoutInflater.from(this).inflate(R.layout.layout_header, getRecyclerView(), false);
+//        View footerView = LayoutInflater.from(this).inflate(R.layout.layout_footer, getRecyclerView(), false);
+//        getRecyclerView().addHeaderView(headerView);
+//        getRecyclerView().addFooterView(footerView);
+
+        setLoadOver(false);
     }
 
     @Override

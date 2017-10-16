@@ -169,6 +169,14 @@ public class WrapRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return position < mHeaderViews.size();
     }
 
+    public int getFooterViewsCount() {
+        return mFooterViews.size();
+    }
+
+    public int getHeaderViewsCount() {
+        return mHeaderViews.size();
+    }
+
 
     /**
      * 解决GridLayoutManager添加头部和底部不占用一行的问题
@@ -185,20 +193,14 @@ public class WrapRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     return isHeaderOrFooter ? layoutManager.getSpanCount() : 1;
                 }
             });
-        } else if (recycler.getLayoutManager() instanceof StaggeredGridLayoutManager) {
-            final StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) recycler.getLayoutManager();
-
-//            layoutManager.setSpanSizeLookup(new StaggeredGridLayoutManager.SpanSizeLookup() {
-//                @Override
-//                public int getSpanSize(int position) {
-//                    boolean isHeaderOrFooter = isHeaderPosition(position) || isFooterPosition(position);
-//                    return isHeaderOrFooter ? layoutManager.getSpanCount() : 1;
-//                }
-//            });
         }
-
     }
 
+    /**
+     * 解决StaggeredGridLayoutManager添加头部和底部不占用一行的问题
+     *
+     * @param holder
+     */
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);

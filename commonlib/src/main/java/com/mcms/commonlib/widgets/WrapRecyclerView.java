@@ -132,5 +132,23 @@ public class WrapRecyclerView extends RecyclerView {
             mWrapRecyclerAdapter.removeFooterView(view);
         }
     }
+
+    public int getFooterViewsCount() {
+
+        if (mWrapRecyclerAdapter != null) {
+            return mWrapRecyclerAdapter.getFooterViewsCount();
+        }
+
+        return 0;
+    }
+
+    public int getHeaderViewsCount() {
+
+        if (mWrapRecyclerAdapter != null) {
+            return mWrapRecyclerAdapter.getHeaderViewsCount();
+        }
+        return 0;
+
+    }
 }
 
