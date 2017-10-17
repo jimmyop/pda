@@ -1,6 +1,7 @@
 package com.mcms.pda;
 
-import com.mcms.commonlib.BaseApplication;
+
+import com.jimmy.lib.BaseApplication;
 
 /**
  * Created by chenjiaming1 on 2017/9/11.

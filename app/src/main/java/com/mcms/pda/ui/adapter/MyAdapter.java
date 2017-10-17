@@ -5,13 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.mcms.commonlib.adapter.BaseRecyclerAdapter;
-import com.mcms.commonlib.adapter.BaseRecyclerViewHolder;
+import com.jimmy.lib.adapter.BaseRecyclerAdapter;
+import com.jimmy.lib.adapter.BaseRecyclerViewHolder;
 import com.mcms.pda.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by chenjiaming1 on 2017/9/28.

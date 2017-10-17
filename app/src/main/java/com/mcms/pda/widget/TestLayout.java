@@ -7,7 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.mcms.commonlib.utils.LogUtils;
+import com.jimmy.lib.utils.LogUtils;
 import com.qmuiteam.qmui.drawable.QMUIMaterialProgressDrawable;
 import com.qmuiteam.qmui.util.QMUIResHelper;
 import com.qmuiteam.qmui.widget.pullRefreshLayout.QMUIPullRefreshLayout;

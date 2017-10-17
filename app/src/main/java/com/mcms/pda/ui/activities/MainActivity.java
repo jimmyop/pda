@@ -4,19 +4,18 @@ import android.content.Context;
 import android.view.View;
 
 import com.android.volley.Request;
-import com.mcms.commonlib.adapter.BaseArrayAdapter;
-import com.mcms.commonlib.avtivities.BaseRequestListViewActivity;
-import com.mcms.commonlib.request.YJLGsonRequest;
-import com.mcms.commonlib.request.data.BaseReslutRes;
-import com.mcms.commonlib.request.loadingmanager.LoadingUiType;
-import com.mcms.commonlib.utils.LogUtils;
-import com.mcms.commonlib.widgets.TitleHeadLayout;
+import com.jimmy.lib.adapter.BaseArrayAdapter;
+import com.jimmy.lib.avtivities.BaseRequestListViewActivity;
+import com.jimmy.lib.request.YJLGsonRequest;
+import com.jimmy.lib.request.data.BaseReslutRes;
+import com.jimmy.lib.request.loadingmanager.LoadingUiType;
+import com.jimmy.lib.utils.LogUtils;
+import com.jimmy.lib.widgets.TitleHeadLayout;
 import com.mcms.pda.R;
 import com.mcms.pda.constants.ConstantsUrl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends BaseRequestListViewActivity {
 
@@ -26,11 +25,11 @@ public class MainActivity extends BaseRequestListViewActivity {
     protected void initHeaderView(TitleHeadLayout headLayout) {
         super.initHeaderView(headLayout);
         headLayout.setTitleText("Test");
-        headLayout.setRightText("test");
+        headLayout.setRightText("grid");
         headLayout.setRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(MainActivity.this, TestActivity.class);
+                startActivity(MainActivity.this, GridActivity.class);
             }
         });
     }

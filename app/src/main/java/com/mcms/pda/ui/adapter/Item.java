@@ -8,11 +8,13 @@ public class Item {
     private int res;//图片
     private String tv1;//文字
     private int type;//类型
+    private String  url;//类型
 
-    public Item(int res, String tv1,int type) {
+    public Item(int res, String tv1,int type,String url) {
         this.res = res;
         this.tv1 = tv1;
         this.type = type;
+        this.url = url;
     }
 
     public int getType() {
@@ -39,4 +41,11 @@ public class Item {
         this.tv1 = tv1;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

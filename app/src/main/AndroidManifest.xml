@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.TestActivity" />
+        <activity android:name=".ui.activities.GridActivity" />
+        <activity android:name=".ui.activities.StaggeredActivity" />
         <activity android:name=".ui.activities.TestPullActivity" />
     </application>
 
