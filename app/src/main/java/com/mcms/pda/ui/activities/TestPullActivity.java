@@ -36,6 +36,13 @@ public class TestPullActivity extends BaseRequestActivity {
     protected void initHeaderView(TitleHeadLayout headLayout) {
         super.initHeaderView(headLayout);
         headLayout.setTitleText("BBBB");
+        headLayout.setRightText("test");
+        headLayout.setRightClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(TestPullActivity.this, TestActivity.class);
+            }
+        });
 
     }
 

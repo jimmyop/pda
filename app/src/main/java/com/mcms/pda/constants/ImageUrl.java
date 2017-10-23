@@ -8,7 +8,7 @@ public class ImageUrl {
 
     public static final String[] images = {
             "http://img.poco.cn/mypoco/myphoto/20071129/21/3898355120071129211344578_007_640.jpg",
-            "http://newspaper.jnu.edu.cn/digidata/2014-9-15/4804415913.JPG",
+            "http://heilongjiang.sinaimg.cn/2015/1026/U10115P1274DT20151026105445.jpg",
             "http://img.clewm.net/richTextCover/2014/01/22/52dfa783110d0.jpg",
             "http://imgsrc.baidu.com/imgad/pic/item/96dda144ad3459825e16a88606f431adcbef8402.jpg",
             "http://heilongjiang.sinaimg.cn/2015/1026/U10115P1274DT20151026105445.jpg",

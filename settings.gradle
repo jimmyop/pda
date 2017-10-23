@@ -1,1 +1,1 @@
-include ':app', ':commonlib', ':flickr', ':gallery', ':giphy'
+include ':app', ':commonlib'
