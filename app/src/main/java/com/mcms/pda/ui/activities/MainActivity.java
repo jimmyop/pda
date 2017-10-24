@@ -13,6 +13,7 @@ import com.jimmy.lib.utils.LogUtils;
 import com.jimmy.lib.widgets.TitleHeadLayout;
 import com.mcms.pda.R;
 import com.mcms.pda.constants.ConstantsUrl;
+import com.mcms.pda.data.TestData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +56,8 @@ public class MainActivity extends BaseRequestListViewActivity {
         }
         mMyAdapter.addAll(list);
 
-//        addYJLGsonRequest2QueueByTag(getUserInfoRequest(), queueTag, backGroundUI);
-//        startQueueRequests(true, queueTag);
+        addYJLGsonRequest2QueueByTag(getUserInfoRequest(), queueTag, backGroundUI);
+        startQueueRequests(true, queueTag);
     }
 
     @Override
@@ -117,14 +118,14 @@ public class MainActivity extends BaseRequestListViewActivity {
         }
     }
 
-    private YJLGsonRequest<BaseReslutRes> getUserInfoRequest() {
+    private YJLGsonRequest<TestData> getUserInfoRequest() {
 //        HashMap<String, String> parm = new HashMap<>();
 //        parm.put("usercode", "7126");
 //        parm.put("password", "7071");
         YJLGsonRequest request = new YJLGsonRequest<>(
                 ConstantsUrl.LOGIN,
                 null,
-                BaseReslutRes.class,
+                TestData.class,
                 this
         );
         request.setMethod(Request.Method.GET);

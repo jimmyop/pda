@@ -40,7 +40,6 @@ public class TestPullActivity extends BaseRequestActivity {
         headLayout.setRightClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(TestPullActivity.this, TestActivity.class);
             }
         });
 

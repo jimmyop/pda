@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">CommonLib</string>
 
-    <string name="app_url">http://gank.io/api/data/Android/10/1</string>
+    <!--<string name="app_url">http://gank.io/api/data/Android/10/1</string>-->
+    <string name="app_url">http://news.at.zhihu.com/api/4/news/before/20170919</string>
     <!--<string name="app_url">http://113.108.131.13:98</string>-->
     <!--<string name="app_url">http://113.108.131.14:88</string>-->
     <!--<string name="app_url">http://113.108.131.14</string>-->
